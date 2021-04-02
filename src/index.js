@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const db = require('./config/db');
 
-require('dotenv').config({ path: 'variables.env' });
+require('dotenv').config();
 
 // create server
 const app = express();
@@ -23,6 +23,7 @@ const PORT = process.env.PORT || 4000;
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/tasks', require('./routes/tasks'));
 
 // run server
 app.listen(PORT, () => {
