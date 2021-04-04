@@ -1,6 +1,10 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { authUser } = require('../controllers/authController');
+const {
+  authUser,
+  authenticatedUser,
+} = require('../controllers/authController');
+const auth = require('../middleware/auth');
 // api/auth
 
 const router = Router();
@@ -14,5 +18,6 @@ router.post('/', [
   authUser,
 ]);
 
-// get users
+// get user
+router.get('/', auth, authenticatedUser);
 module.exports = router;
