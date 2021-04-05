@@ -40,7 +40,7 @@ exports.createTask = async (req, res) => {
 exports.getTasks = async (req, res) => {
   try {
     // Extract the project and verify that it exists
-    const project = await Project.findById(req.body.project);
+    const project = await Project.findById(req.query.project);
 
     if (!project) {
       return res.status(404).json({ msg: 'Proyecto no encontrado' });
@@ -52,7 +52,7 @@ exports.getTasks = async (req, res) => {
     }
 
     // get tasks by project
-    const tasks = await Task.find({ project: req.body.project });
+    const tasks = await Task.find({ project: req.query.project });
 
     res.json(tasks);
   } catch (error) {
@@ -65,6 +65,8 @@ exports.getTasks = async (req, res) => {
 exports.updateTask = async (req, res) => {
   try {
     const { project, name, state } = req.body;
+    console.log(req.body);
+
     // task exists
     let task = await Task.findById(req.params.id);
 
@@ -81,9 +83,10 @@ exports.updateTask = async (req, res) => {
     }
 
     // create new Task
-    const newTask = {};
-    if (name) newTask.name = name;
-    if (state) newTask.state = state;
+    const newTask = {
+      name,
+      state,
+    };
 
     // save task
     task = await Task.findByIdAndUpdate({ _id: req.params.id }, newTask, {
@@ -100,7 +103,7 @@ exports.updateTask = async (req, res) => {
 // delete task
 exports.deleteTask = async (req, res) => {
   try {
-    const { project } = req.body;
+    const { project } = req.query;
 
     // task exists
     const task = await Task.findById(req.params.id);
